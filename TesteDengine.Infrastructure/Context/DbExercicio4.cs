@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TesteDengine.Domain.Entities;
 namespace TesteDengine;
 
 public class DbExercicio4: DbContext
@@ -11,5 +12,6 @@ public class DbExercicio4: DbContext
 
     public DbSet<Fatura> Fatura { get; set; }
     public DbSet<FaturaItem> FaturaItem{ get; set; }
+    public DbSet<Cliente> Cliente { get; set; }
         
 }
