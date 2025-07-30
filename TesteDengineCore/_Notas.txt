@@ -1,0 +1,45 @@
+﻿Para facilitar, foi utilizado o InMemoryDb para uso do DbContext.
+Também foi feita uma configuração básica do serviço para instanciar um DbContext para esse console.
+
+Você está livre para alterar/incluir/deletar todos os arquivos/classe desse projeto.
+Modificar as classes de dominio, adicionando novos campos para atender as regras de negócio)
+inclusive adicionar novos projetos para outros propósitos (UnitTest, Library, Web, Api).
+
+
+
+O domínio é composto por Fatura e FaturaItem (Item da Fatura):
+
+Fatura: Contém as informações principais da fatura e contém items.
+FaturaItem: Contem os dados do item anexado à fatura
+
+
+1) Voce deverá criar uma model que será responsável por gerenciar as Faturas.
+-> Permitirá adicionar uma nova fatura no banco, adicionar items, modificar, excluir etc
+
+Regra de negócio do model para FaturaItem:
+...Os valores precisam ser positivos
+...A ordem precisa ser multiplo de 10, unicos na fatura e sem buracos (Ex: 10, 20, 40)
+...Se o valor for maior que 1000, o item deverá ter um check vericação (Ex: o valor é esse mesmo?)
+...ter uma descriçao breve, obrigatoria, do item (não superior a 20 caracteres)
+
+
+Regra de negócio do model para Fatura:
+...Cliente é obrigatorio
+
+
+
+2) Testar as regras do modelo
+
+3) Criar uma funcionalidade que permite gerar relórios das faturas:
+
+...Total por cliente
+...Total por Ano/Mes
+...Top 10 Faturas
+...Top 10 maiores items
+
+
+...pesquisa para listar faturas e faturas 
+
+
+Exercicio Bônus!
+4) Criar a versão em AspnetCore.
