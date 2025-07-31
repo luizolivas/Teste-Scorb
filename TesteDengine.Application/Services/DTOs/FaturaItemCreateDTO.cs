@@ -8,6 +8,7 @@ namespace TesteDengine.Application.Services.DTOs
 {
     public class FaturaItemCreateDTO
     {
+        public int FaturaId { get; set; }
         public int Ordem { get; set; }
         public double Valor { get; set; }
         public string Descricao { get; set; }

@@ -6,6 +6,7 @@ public class FaturaItem
     public int FaturaId { get; set; }
     public int Ordem { get; set; }
     public double Valor { get; set; }
+    public string Descricao { get; set; }
     
     public virtual Fatura Fatura { get; set; }
 

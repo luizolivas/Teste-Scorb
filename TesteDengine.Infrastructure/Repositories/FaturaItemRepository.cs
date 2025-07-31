@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,36 +8,61 @@ using TesteDengine.Domain.Interfaces;
 
 namespace TesteDengine.Infrastructure.Repositories
 {
-    public class FaturaItemRepository : IFaturaItemItemRepository
+    public class FaturaItemRepository : IFaturaItemRepository
     {
         private readonly DbExercicio4 _context;
         public FaturaItemRepository(DbExercicio4 context) 
         {
             _context = context;
         }
-        public Task<FaturaItem?> AddAsync(FaturaItem food)
+        public async Task<FaturaItem?> AddAsync(FaturaItem item)
         {
-            throw new NotImplementedException();
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Item da fatura não pode ser nulo.");
+            }
+
+            await _context.FaturaItem.AddAsync(item);
+            await _context.SaveChangesAsync(); 
+            return item;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var itemToDelete = await _context.FaturaItem.FindAsync(id); 
+            if (itemToDelete != null)
+            {
+                _context.FaturaItem.Remove(itemToDelete); 
+                await _context.SaveChangesAsync(); 
+            }
         }
 
-        public Task<IEnumerable<FaturaItem>> GetAllAsync()
+        public async Task<IEnumerable<FaturaItem>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.FaturaItem.ToListAsync();
         }
 
-        public Task<FaturaItem?> GetByIdAsync(int id)
+        public async Task<IEnumerable<FaturaItem>> GetByFaturaIdAsync(int faturaId)
         {
-            throw new NotImplementedException();
+            return await _context.FaturaItem
+                .Where(item => item.FaturaId == faturaId)
+                .ToListAsync();
         }
 
-        public Task UpdateAsync(FaturaItem food)
+        public async Task<FaturaItem?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.FaturaItem.FindAsync(id);
+        }
+
+        public async Task UpdateAsync(FaturaItem fatura)
+        {
+            if (fatura == null)
+            {
+                throw new ArgumentNullException(nameof(fatura), "Item da fatura não pode ser nulo.");
+            }
+
+            _context.FaturaItem.Update(fatura);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,29 +10,74 @@ namespace TesteDengine.Infrastructure.Repositories
 {
     public class FaturaRepository : IFaturaRepository
     {
-        public Task<Fatura?> AddAsync(Fatura food)
+
+        private readonly DbExercicio4 _context;
+
+        public FaturaRepository(DbExercicio4 context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task<Fatura?> AddAsync(Fatura fatura) 
         {
-            throw new NotImplementedException();
+            if (fatura == null)
+            {
+                throw new ArgumentNullException(nameof(fatura), "Fatura não pode ser nula.");
+            }
+
+            await _context.Fatura.AddAsync(fatura);
+            await _context.SaveChangesAsync(); 
+            return fatura; 
         }
 
-        public Task<IEnumerable<Fatura>> GetAllAsync()
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var faturaToDelete = await _context.Fatura.FindAsync(id);
+            if (faturaToDelete != null)
+            {
+                _context.Fatura.Remove(faturaToDelete);
+                await _context.SaveChangesAsync(); 
+            }
         }
 
-        public Task<Fatura?> GetByIdAsync(int id)
+        public async Task<IEnumerable<Fatura>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Fatura
+                .Include(f => f.Cliente) 
+                .ToListAsync();
         }
 
-        public Task UpdateAsync(Fatura food)
+        public async Task<IEnumerable<Fatura>> GetByClienteIdAsync(int idCliente)
         {
-            throw new NotImplementedException();
+            return await _context.Fatura
+                .Include(f => f.Cliente)   
+                .Include(f => f.FaturaItem) 
+                .Where(f => f.ClienteId == idCliente) 
+                .ToListAsync();             
+        }
+
+        public async Task<Fatura?> GetByIdAsync(int id)
+        {
+            return await _context.Fatura.FindAsync(id);
+        }
+
+        public async Task<Fatura?> GetByIdWithDetailsAsync(int id)
+        {
+            return await _context.Fatura
+                .Include(f => f.Cliente)     
+                .Include(f => f.FaturaItem)  
+                .FirstOrDefaultAsync(f => f.FaturaId == id); 
+        }
+
+        public async Task UpdateAsync(Fatura fatura) 
+        {
+            if (fatura == null)
+            {
+                throw new ArgumentNullException(nameof(fatura), "Fatura não pode ser nula.");
+            }
+
+            _context.Fatura.Update(fatura);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -16,5 +16,6 @@ namespace TesteDengine.Application.Services.Interfaces
         Task AddAsync(FaturaItemCreateDTO dto);
         Task UpdateAsync(FaturaItemUpdateDTO dto);
         Task DeleteAsync(int id);
+
     }
 }

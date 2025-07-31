@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,29 +11,54 @@ namespace TesteDengine.Infrastructure.Repositories
 {
     public class ClienteRepository : IClienteRepository
     {
-        public Task<Cliente?> AddAsync(Cliente food)
+        private readonly DbExercicio4 _context;
+
+        public ClienteRepository(DbExercicio4 context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task<Cliente?> AddAsync(Cliente cliente) 
         {
-            throw new NotImplementedException();
+            if (cliente == null)
+            {
+                throw new ArgumentNullException(nameof(cliente), "Cliente não pode ser nulo.");
+            }
+
+            await _context.Cliente.AddAsync(cliente);
+            await _context.SaveChangesAsync();
+            return cliente; 
         }
 
-        public Task<IEnumerable<Cliente>> GetAllAsync()
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var clienteToDelete = await _context.Cliente.FindAsync(id); 
+            if (clienteToDelete != null)
+            {
+                _context.Cliente.Remove(clienteToDelete); 
+                await _context.SaveChangesAsync(); 
+            }
         }
 
-        public Task<Cliente?> GetByIdAsync(int id)
+        public async Task<IEnumerable<Cliente>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Cliente.ToListAsync(); 
         }
 
-        public Task UpdateAsync(Cliente food)
+        public async Task<Cliente?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Cliente.FindAsync(id);
+        }
+
+        public async Task UpdateAsync(Cliente cliente) 
+        {
+            if (cliente == null)
+            {
+                throw new ArgumentNullException(nameof(cliente), "Cliente não pode ser nulo.");
+            }
+
+            _context.Cliente.Update(cliente);
+            await _context.SaveChangesAsync(); 
         }
     }
 }
