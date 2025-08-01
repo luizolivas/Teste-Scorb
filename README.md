@@ -12,11 +12,11 @@ TesteDengineCore/
 
 - TesteDengine.Infrastructure/ # Persistência de dados (EF Core)
 
-- TesteDengine.WebMVC/ # Front-end MVC com relatórios e CRUDs
+- TesteDengine.WebMVC/ # Front-end relatórios e CRUDs
 
 - TesteDengine.Testes/ # Testes unitários dos serviços
 
-- TesteDengineCore/ # Projeto Console (integrações / ferramentas)
+- TesteDengineCore/ # Projeto Console
 
 - TesteDengineCore.sln # Solução principal
 ````
