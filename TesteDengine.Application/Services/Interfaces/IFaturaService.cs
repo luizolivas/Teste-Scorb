@@ -12,6 +12,7 @@ namespace TesteDengine.Application.Services.Interfaces
         Task<IEnumerable<FaturaDTO>> GetAllAsync();
         Task<IEnumerable<FaturaDTO>> GetAllByClienteIdAsync(int idCliente);
         Task<FaturaDTO?> GetByIdAsync(int id);
+        Task<FaturaDTO?> GetByIdWithDetailsAsync(int id);
         Task AddAsync(FaturaCreateDTO dto);
         Task UpdateAsync(FaturaUpdateDTO dto);
         Task DeleteAsync(int id);

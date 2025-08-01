@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,9 +25,10 @@ namespace TesteDengine.Application.Services
 
         public async Task AddAsync(FaturaItemCreateDTO dto)
         {
-            if (dto.FaturaId == 0) 
+            var faturaExistente = await _faturaRepository.GetByIdAsync(dto.FaturaId);
+            if (faturaExistente == null)
             {
-                throw new ArgumentException("O FaturaId deve ser fornecido para o item.");
+                throw new KeyNotFoundException($"Fatura com ID {dto.FaturaId} não encontrada para adicionar item.");
             }
 
             var novoFaturaItem = new FaturaItem {
@@ -37,28 +39,41 @@ namespace TesteDengine.Application.Services
             };
 
             var existingItemsInFatura = await _faturaItemRepository.GetByFaturaIdAsync(dto.FaturaId);
-
             try
             {
                 validadorFaturaItem.Validar(novoFaturaItem, existingItemsInFatura.ToList());
             }
-            catch (Exception ex)
+            catch (ValidationException ex) 
             {
-                throw new Exception($"Falha na validação do FaturaItem: {ex.Message}", ex);
+                throw new ValidationException($"Falha na validação das regras de negócio para o item da fatura: {ex.Message}", ex);
             }
 
             await _faturaItemRepository.AddAsync(novoFaturaItem);
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var item = await _faturaItemRepository.GetByIdAsync(id);
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Item da Fatura com ID {id} não encontrado para exclusão.");
+            }
+
+            await _faturaItemRepository.DeleteAsync(id);
         }
 
-        public Task<IEnumerable<FaturaItemDTO>> GetAllAsync()
+        public async Task<IEnumerable<FaturaItemDTO>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var itens = await _faturaItemRepository.GetAllAsync();
+            return itens.Select(i => new FaturaItemDTO {
+                FaturaItemId = i.FaturaItemId,
+                FaturaId = i.FaturaId,
+                Ordem = i.Ordem,
+                Valor = i.Valor,
+                Descricao = i.Descricao
+            });
         }
+
 
         public async Task<IEnumerable<FaturaItemDTO>> GetAllByFaturaIdAsync(int faturaId)
         {
@@ -71,19 +86,65 @@ namespace TesteDengine.Application.Services
             }).ToList();
         }
 
-        public Task<FaturaItemDTO?> GetByFaturaIdAsync(int faturaId)
+        public async Task<IEnumerable<FaturaItemDTO>> GetByFaturaIdAsync(int faturaId)
         {
-            throw new NotImplementedException();
+            var itens = await _faturaItemRepository.GetByFaturaIdAsync(faturaId);
+            return itens.Select(i => new FaturaItemDTO {
+                FaturaItemId = i.FaturaItemId,
+                FaturaId = i.FaturaId,
+                Ordem = i.Ordem,
+                Valor = i.Valor,
+                Descricao = i.Descricao
+            });
         }
 
-        public Task<FaturaItemDTO?> GetByIdAsync(int id)
+        public async Task<FaturaItemDTO?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var item = await _faturaItemRepository.GetByIdAsync(id);
+            if (item == null) return null;
+
+            return new FaturaItemDTO {
+                FaturaItemId = item.FaturaItemId,
+                FaturaId = item.FaturaId,
+                Ordem = item.Ordem,
+                Valor = item.Valor,
+                Descricao = item.Descricao
+            };
         }
 
-        public Task UpdateAsync(FaturaItemUpdateDTO dto)
+        public async Task UpdateAsync(FaturaItemUpdateDTO dto)
         {
-            throw new NotImplementedException();
+            var itemExistente = await _faturaItemRepository.GetByIdAsync(dto.FaturaItemId);
+            if (itemExistente == null)
+            {
+                throw new KeyNotFoundException($"Item da Fatura com ID {dto.FaturaItemId} não encontrado para atualização.");
+            }
+
+            var allItemsInFatura = await _faturaItemRepository.GetByFaturaIdAsync(itemExistente.FaturaId);
+            var otherItemsInFatura = allItemsInFatura.Where(i => i.FaturaItemId != itemExistente.FaturaItemId).ToList();
+
+            var itemAtualizado = new FaturaItem {
+                FaturaItemId = itemExistente.FaturaItemId,
+                FaturaId = itemExistente.FaturaId,
+                Ordem = dto.Ordem,
+                Valor = dto.Valor,
+                Descricao = dto.Descricao
+            };
+
+            try
+            {
+
+                validadorFaturaItem.Validar(itemAtualizado, otherItemsInFatura);
+            }
+            catch (ValidationException ex)
+            {
+                throw new ValidationException($"Falha na validação das regras de negócio para o item da fatura: {ex.Message}", ex);
+            }
+
+            itemExistente.Ordem = dto.Ordem;
+            itemExistente.Valor = dto.Valor;
+            itemExistente.Descricao = dto.Descricao;
+            await _faturaItemRepository.UpdateAsync(itemExistente);
         }
     }
 }

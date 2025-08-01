@@ -107,6 +107,19 @@ namespace TesteDengine.Application.Services
 
             return new FaturaDTO {
                 FaturaId = fatura.FaturaId,
+                Data = fatura.Data
+            };
+        }
+
+        public async Task<FaturaDTO?> GetByIdWithDetailsAsync(int id)
+        {
+            var fatura = await _faturaRepository.GetByIdAsync(id);
+
+            if (fatura == null)
+                throw new Exception("Fatura não encontrada.");
+
+            return new FaturaDTO {
+                FaturaId = fatura.FaturaId,
                 Data = fatura.Data,
                 Cliente = new ClienteDTO {
                     ClienteId = fatura.Cliente.ClienteId,
