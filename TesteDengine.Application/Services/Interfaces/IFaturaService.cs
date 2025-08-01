@@ -10,6 +10,7 @@ namespace TesteDengine.Application.Services.Interfaces
     public interface IFaturaService
     {
         Task<IEnumerable<FaturaDTO>> GetAllAsync();
+        Task<IEnumerable<FaturaDTO>> GetAllWithDetailsAsync();
         Task<IEnumerable<FaturaDTO>> GetAllByClienteIdAsync(int idCliente);
         Task<FaturaDTO?> GetByIdAsync(int id);
         Task<FaturaDTO?> GetByIdWithDetailsAsync(int id);

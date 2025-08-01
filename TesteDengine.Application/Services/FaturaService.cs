@@ -56,14 +56,25 @@ namespace TesteDengine.Application.Services
 
             var faturaDTOs = faturas.Select(fatura => new FaturaDTO {
                 FaturaId = fatura.FaturaId,
+                Data = fatura.Data
+            }).ToList();
+
+            return faturaDTOs;
+        }
+
+        public async Task<IEnumerable<FaturaDTO>> GetAllWithDetailsAsync()
+        {
+            var faturas = await _faturaRepository.GetAllWithDetailsAsync();
+
+            var faturaDTOs = faturas.Select(fatura => new FaturaDTO {
+                FaturaId = fatura.FaturaId,
                 Data = fatura.Data,
                 Cliente = new ClienteDTO {
                     ClienteId = fatura.Cliente.ClienteId,
                     Nome = fatura.Cliente.Nome
                 },
-
-                Itens = new List<FaturaItemDTO>(), 
-                Total = fatura.FaturaItem?.Sum(i => i.Valor) ?? 0 
+                Itens = new List<FaturaItemDTO>(),
+                Total = fatura.FaturaItem?.Sum(i => i.Valor) ?? 0
             }).ToList();
 
             return faturaDTOs;
@@ -107,7 +118,18 @@ namespace TesteDengine.Application.Services
 
             return new FaturaDTO {
                 FaturaId = fatura.FaturaId,
-                Data = fatura.Data
+                Data = fatura.Data,
+                Cliente = new ClienteDTO {
+                    ClienteId = fatura.Cliente.ClienteId,
+                    Nome = fatura.Cliente.Nome
+                },
+                Itens = fatura.FaturaItem.Select(i => new FaturaItemDTO {
+                    FaturaItemId = i.FaturaItemId,
+                    Descricao = i.Descricao,
+                    Valor = i.Valor,
+                    Ordem = i.Ordem,
+                }).ToList(),
+                Total = fatura.FaturaItem.Sum(i => i.Valor)
             };
         }
 
