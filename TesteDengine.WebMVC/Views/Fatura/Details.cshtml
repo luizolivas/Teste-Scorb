@@ -1,0 +1,53 @@
+﻿@model TesteDengine.Application.Services.DTOs.FaturaDTO
+
+@{
+    ViewData["Title"] = "Detalhes da Fatura";
+}
+
+<h1>Detalhes da Fatura</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Cliente</dt>
+    <dd class="col-sm-10">@Model.Cliente?.Nome</dd>
+
+    <dt class="col-sm-2">Data</dt>
+    <dd class="col-sm-10">@Model.Data.ToShortDateString()</dd>
+
+    <dt class="col-sm-2">Total</dt>
+    <dd class="col-sm-10">@Model.Total.ToString("C")</dd>
+</dl>
+
+<h3>Itens</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Descrição</th>
+            <th>Ordem</th>
+            <th>Valor</th>
+            <th>Precisa Verificação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Itens)
+        {
+            <tr>
+                <td>@item.Descricao</td>
+                <td>@item.Ordem</td>
+                <td>@item.Valor.ToString("C")</td>
+                <td>@item.PrecisaVerificacao</td>
+                <td>
+                    <a asp-controller="FaturaItem" asp-action="Edit" asp-route-id="@item.FaturaItemId" class="btn btn-sm btn-primary">Editar</a>
+                    <form asp-controller="FaturaItem" asp-action="Delete" asp-route-id="@item.FaturaItemId" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    <a asp-controller="FaturaItem" asp-action="Create" asp-route-faturaId="@Model.FaturaId" class="btn btn-success">Adicionar Item</a>
+    <a asp-action="Edit" asp-route-id="@Model.FaturaId" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</p>

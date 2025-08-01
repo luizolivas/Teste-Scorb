@@ -1,0 +1,33 @@
+﻿@model List<TesteDengine.Application.Services.DTOs.FaturaDTO>
+@{
+    ViewData["Title"] = "Top 10 Faturas";
+}
+
+<h2>Top 10 Faturas por Valor Total</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Erro))
+{
+    <div class="alert alert-danger">@ViewBag.Erro</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Data</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var f in Model)
+            {
+                <tr>
+                    <td>@f.Cliente?.Nome</td>
+                    <td>@f.Data.ToShortDateString()</td>
+                    <td>@f.Total.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

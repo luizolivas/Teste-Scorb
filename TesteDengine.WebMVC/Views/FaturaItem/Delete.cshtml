@@ -1,0 +1,23 @@
+﻿@model TesteDengine.Application.Services.DTOs.FaturaItemDTO
+
+@{
+    ViewData["Title"] = "Excluir Item";
+}
+
+<h2>Excluir Item</h2>
+
+<h4>Tem certeza que deseja excluir o item?</h4>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Descrição</dt>
+        <dd class="col-sm-10">@Model.Descricao</dd>
+        <dt class="col-sm-2">Valor</dt>
+        <dd class="col-sm-10">@Model.Valor.ToString("C")</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="FaturaItemId" />
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a asp-controller="Fatura" asp-action="Details" asp-route-id="@Model.FaturaId" class="btn btn-secondary">Cancelar</a>
+</form>

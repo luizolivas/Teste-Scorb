@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TesteDengine.Application.Services.DTOs.FaturaDTO>
+
+@{
+    ViewData["Title"] = "Faturas";
+}
+
+<h1>Faturas</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nova Fatura</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var fatura in Model)
+        {
+            <tr>
+                <td>@fatura.FaturaId</td>
+                <td>@fatura.Cliente?.Nome</td>
+                <td>@fatura.Data.ToShortDateString()</td>
+                <td>@fatura.Total.ToString("C")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@fatura.FaturaId">Detalhes</a> |
+                    <a asp-action="Edit" asp-route-id="@fatura.FaturaId">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@fatura.FaturaId">Excluir</a>
+                    <a asp-controller="FaturaItem" asp-action="Create" asp-route-faturaId="@fatura.FaturaId" class="btn btn-success">Adicionar Item</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

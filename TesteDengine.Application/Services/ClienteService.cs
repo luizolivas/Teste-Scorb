@@ -13,10 +13,12 @@ namespace TesteDengine.Application.Services
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
+        private readonly IFaturaRepository _faturaRepository;
 
-        public ClienteService(IClienteRepository clienteRepository)
+        public ClienteService(IClienteRepository clienteRepository, IFaturaRepository faturaRepository)
         {
             _clienteRepository = clienteRepository;
+            _faturaRepository = faturaRepository;
         }
 
         public async Task AddAsync(ClienteCreateDTO dto)
@@ -34,6 +36,13 @@ namespace TesteDengine.Application.Services
             if (clienteToDelete == null)
             {
                 throw new Exception($"Cliente com ID {id} não encontrado para exclusão.");
+            }
+
+            var fatura = await _faturaRepository.GetByClienteIdAsync(clienteToDelete.ClienteId);
+
+            if(fatura != null)
+            {
+                throw new Exception("Não é possivel excluir um cliente enquanto há faturas cadastradas em seu nome!");
             }
 
             await _clienteRepository.DeleteAsync(id);

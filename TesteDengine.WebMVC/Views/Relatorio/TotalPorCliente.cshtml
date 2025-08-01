@@ -1,0 +1,31 @@
+﻿@model List<TesteDengine.Application.Relatorios.DTOs.TotalPorClienteDTO>
+@{
+    ViewData["Title"] = "Total por Cliente";
+}
+
+<h2>Total por Cliente</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Erro))
+{
+    <div class="alert alert-danger">@ViewBag.Erro</div>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.ClienteNome</td>
+                    <td>@c.Total.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

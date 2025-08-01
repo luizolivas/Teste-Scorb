@@ -74,7 +74,7 @@ namespace TesteDengine.Application.Relatorios
 
         public async Task<List<TotalPorClienteDTO>> ObterTotalPorClienteAsync()
         {
-            var faturas = await _faturaRepository.GetAllAsync();
+            var faturas = await _faturaRepository.GetAllWithDetailsAsync();
 
             if (faturas == null || !faturas.Any())
                 throw new KeyNotFoundException("Nenhum registro encontrado.");

@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Página Inicial";
+}
+
+<h2>Bem-vindo ao sistema de faturas</h2>
+
+<p>Use os links abaixo para navegar pelo sistema:</p>
+
+<div>
+    <a asp-controller="Fatura" asp-action="Index" class="btn btn-primary m-1">📄 Listar Faturas</a>
+    <a asp-controller="Fatura" asp-action="Create" class="btn btn-success m-1">➕ Criar Nova Fatura</a>
+    <a asp-controller="Cliente" asp-action="Index" class="btn btn-info m-1">👥 Listar Clientes</a>
+    <a asp-controller="Relatorio" asp-action="Index" class="btn btn-dark m-1">📊 Relatório de Faturas</a>
+
+</div>

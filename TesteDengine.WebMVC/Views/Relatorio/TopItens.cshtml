@@ -1,0 +1,33 @@
+﻿@model List<TesteDengine.Application.Services.DTOs.FaturaItemDTO>
+@{
+    ViewData["Title"] = "Top 10 Itens";
+}
+
+<h2>Top 10 Itens de Fatura</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Erro))
+{
+    <div class="alert alert-danger">@ViewBag.Erro</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Ordem</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Descricao</td>
+                    <td>@item.Ordem</td>
+                    <td>@item.Valor.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

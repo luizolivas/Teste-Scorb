@@ -128,14 +128,14 @@ namespace TesteDengine.Application.Services
                     Descricao = i.Descricao,
                     Valor = i.Valor,
                     Ordem = i.Ordem,
-                }).ToList(),
+                }).ToList() ?? new List<FaturaItemDTO>(),
                 Total = fatura.FaturaItem.Sum(i => i.Valor)
             };
         }
 
         public async Task<FaturaDTO?> GetByIdWithDetailsAsync(int id)
         {
-            var fatura = await _faturaRepository.GetByIdAsync(id);
+            var fatura = await _faturaRepository.GetByIdWithDetailsAsync(id);
 
             if (fatura == null)
                 throw new Exception("Fatura não encontrada.");

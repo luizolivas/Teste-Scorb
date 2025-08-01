@@ -1,0 +1,33 @@
+﻿@model List<TesteDengine.Application.Relatorios.DTOs.TotalPorMesAnoDTO>
+@{
+    ViewData["Title"] = "Total por Mês e Ano";
+}
+
+<h2>Total por Mês e Ano</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Erro))
+{
+    <div class="alert alert-danger">@ViewBag.Erro</div>
+}
+else
+{
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Ano</th>
+                <th>Mês</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.Ano</td>
+                    <td>@r.Mes</td>
+                    <td>@r.Total.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

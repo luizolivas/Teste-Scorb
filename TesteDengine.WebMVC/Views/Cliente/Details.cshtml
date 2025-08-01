@@ -1,0 +1,14 @@
+﻿@model TesteDengine.Application.Services.DTOs.ClienteDTO
+
+@{
+    ViewData["Title"] = "Detalhes do Cliente";
+}
+
+<h2>Detalhes do Cliente</h2>
+
+<div>
+    <p><strong>ID:</strong> @Model.ClienteId</p>
+    <p><strong>Nome:</strong> @Model.Nome</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Voltar</a>

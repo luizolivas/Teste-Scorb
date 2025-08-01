@@ -1,0 +1,34 @@
+﻿@model TesteDengine.Application.Services.DTOs.FaturaUpdateDTO
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+@{
+    ViewData["Title"] = "Editar Fatura";
+}
+
+<h1>Editar Fatura</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="FaturaId" />
+
+    <div class="form-group">
+        <label asp-for="ClienteId" class="control-label"></label>
+        <input asp-for="ClienteId" class="form-control" />
+        <span asp-validation-for="ClienteId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Data" class="control-label"></label>
+        <input asp-for="Data" class="form-control" type="date" />
+        <span asp-validation-for="Data" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

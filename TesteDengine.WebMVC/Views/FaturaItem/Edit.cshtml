@@ -1,0 +1,49 @@
+﻿@model TesteDengine.Application.Services.DTOs.FaturaItemUpdateDTO
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+@{
+    ViewData["Title"] = "Editar Item";
+}
+
+<h2>Editar Item</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="FaturaItemId" />
+    <div class="form-group">
+        <label asp-for="Descricao"></label>
+        <input asp-for="Descricao" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Ordem"></label>
+        <input asp-for="Ordem" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Valor"></label>
+        <input asp-for="Valor" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-controller="Fatura" asp-action="Details" asp-route-id="@ViewBag.FaturaId" class="btn btn-secondary">Cancelar</a>
+</form>
+
+<script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", function (event) {
+        const valorInput = document.querySelector("input[name='Valor']");
+        const valor = parseFloat(valorInput.value);
+        if (!isNaN(valor) && valor > 1000) {
+            const confirmado = confirm("O valor é maior que 1000. Você confirma que está correto?");
+            if (!confirmado) {
+                event.preventDefault(); 
+            }
+        }
+    });
+</script>
