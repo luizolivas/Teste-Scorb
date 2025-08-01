@@ -77,7 +77,7 @@ Application: regras de negócio e DTOs
 
 Infrastructure: acesso a dados com EF Core
 
-WebMVC / API: apresentação (frontend)
+WebMVC: apresentação (frontend)
 
 Testes: testes unitários com xUnit
 
