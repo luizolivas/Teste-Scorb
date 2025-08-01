@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TesteDengine.Application.Relatorios.DTOs
 {
-    public class TopFaturaDTO
+    public class TotalPorMesAnoDTO
     {
-        public int FaturaId { get; set; }
-        public string ClienteNome { get; set; } 
+        public int Ano { get; set; }
+        public int Mes { get; set; }
         public double Total { get; set; }
     }
 }
