@@ -47,6 +47,14 @@ namespace TesteDengine.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Fatura>> GetAllWithDetailsAsync()
+        {
+            return await _context.Fatura
+                .Include(f => f.Cliente)
+                .Include(f => f.FaturaItem)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Fatura>> GetByClienteIdAsync(int idCliente)
         {
             return await _context.Fatura

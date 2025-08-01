@@ -9,6 +9,7 @@ namespace TesteDengine.Domain.Interfaces
     public interface IFaturaRepository
     {
         Task<IEnumerable<Fatura>> GetAllAsync();
+        Task<IEnumerable<Fatura>> GetAllWithDetailsAsync();
         Task<Fatura?> GetByIdAsync(int id);
         Task<Fatura?> GetByIdWithDetailsAsync(int id);
         Task<IEnumerable<Fatura>> GetByClienteIdAsync(int idCliente);
