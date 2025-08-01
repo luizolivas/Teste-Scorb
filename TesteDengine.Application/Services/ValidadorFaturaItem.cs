@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,22 +15,21 @@ namespace TesteDengine.Application.Services
             ValidarValor(item.Valor);
             ValidarOrdem(item.Ordem, itensExistentes);
             ValidarOrdemSemBuracos(item.Ordem, itensExistentes);
-            ValidarConfirmacaoDeValor(item.Valor);
         }
 
         private void ValidarDescricao(string descricao)
         {
             if (string.IsNullOrWhiteSpace(descricao))
-                throw new Exception("Descrição é obrigatória.");
+                throw new ValidationException("Descrição é obrigatória.");
 
             if (descricao.Length > 20)
-                throw new Exception("Descrição deve ter no máximo 20 caracteres.");
+                throw new ValidationException("Descrição deve ter no máximo 20 caracteres.");
         }
 
         private void ValidarValor(double valor)
         {
             if (valor <= 0)
-                throw new Exception("O valor deve ser positivo.");
+                throw new ValidationException("O valor deve ser positivo.");
         }
 
         private void ValidarOrdem(int ordem, ICollection<FaturaItem> itensExistentes)
@@ -38,7 +38,7 @@ namespace TesteDengine.Application.Services
                 throw new Exception("A ordem deve ser múltiplo de 10.");
 
             if (itensExistentes.Any(i => i.Ordem == ordem))
-                throw new Exception("A ordem deve ser única dentro da fatura.");
+                throw new ValidationException("A ordem deve ser única dentro da fatura.");
         }
 
         private void ValidarOrdemSemBuracos(int novaOrdem, ICollection<FaturaItem> itensExistentes)
@@ -50,17 +50,7 @@ namespace TesteDengine.Application.Services
             for (int i = 1; i < ordens.Count; i++)
             {
                 if (ordens[i] - ordens[i - 1] != 10)
-                    throw new Exception("A sequência da ordem deve ser contínua e múltipla de 10.");
-            }
-        }
-
-        private void ValidarConfirmacaoDeValor(double valor)
-        {
-            if (valor > 1000)
-            {
-                Console.WriteLine("Valor acima de 1000. Confirmar valor? (s/n):");
-                if (Console.ReadLine()?.ToLower() != "s")
-                    throw new Exception("Valor não confirmado.");
+                    throw new ValidationException("A sequência da ordem deve ser contínua e múltipla de 10.");
             }
         }
     }
